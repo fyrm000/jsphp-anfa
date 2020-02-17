@@ -10,18 +10,22 @@ $(() => {
     let id = '';
 
 
+    //Modals show
+
     $(document).on("click", "#buttonAddTeam", () => {
         $("#addTeam").modal("show");
-    });
-
-    $('#valueSearch').blur(function (e) {
-        $('#resultado').html(`<h3>${countTeam} equipos registrados<h3>`);
     });
 
     $(document).on('click', '#buttonAddLiga', () => {
         console.log('Liga');
         $('#addLiga').modal('show');
     })
+
+    //Search input
+
+    $('#valueSearch').blur(function (e) {
+        $('#resultado').html(`<h3>${countTeam} equipos registrados<h3>`);
+    });
 
 
 
@@ -345,6 +349,11 @@ $(() => {
                 <td><span class="badge badge-secondary badge-pill">${liga.idLiga}</span></td>
                 <td>${liga.nombreLiga}</td>
                 <td>${liga.comunaLiga}</td>
+                    <td>
+                    <button class="btn btn-outline-info btn-sm detail-team" id="detailTeam" style='width:70px;display:none;'>Detalles</button>
+                    <button class="btn btn-outline-secondary btn-sm editTeam" style='width:70px;'>Editar</button>
+                    <button type="submit" class="btn btn-outline-danger btn-sm deleteTeam" style='width:35px;'>X</button>
+                    </td>
                 </tr>
                 `;
             })

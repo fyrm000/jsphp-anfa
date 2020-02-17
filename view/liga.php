@@ -20,6 +20,7 @@
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Comuna</th>
+                <th>Acción</th>
                 <!-- <th>Cantidad de equipos</th> -->
             </thead>
             <tbody id="table-liga">
