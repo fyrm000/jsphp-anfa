@@ -2,5 +2,5 @@
 
 define("HOST", "localhost");
 define("DBNAME", "anfa-db");
-define("USER", "root");
-define("PASSWORD", "");
+define("USER", "franco");
+define("PASSWORD", "1245");

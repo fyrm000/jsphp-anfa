@@ -145,7 +145,7 @@ $(() => {
                 };
 
 
-                $.post('/inc/addTeam.php', dataForm, res => {
+                $.post('./inc/addTeam.php', dataForm, res => {
                     // console.log(res);
                     getTeam();
 
@@ -166,7 +166,7 @@ $(() => {
     const getTeam = () => {
         $.ajax({
             method: "GET",
-            url: "/inc/getTeam.php",
+            url: "./inc/getTeam.php",
             success: res => {
                 let template = ``;
                 let teams = $.parseJSON(res);
@@ -237,7 +237,7 @@ $(() => {
                 puntos: $('#epuntos').val()
             }
 
-            $.post('/inc/editTeam.php', dataForm, function (res) {
+            $.post('./inc/editTeam.php', dataForm, function (res) {
                 // console.log(res);
                 getTeam();
             })
@@ -255,9 +255,10 @@ $(() => {
     $(document).on('click', '.deleteTeam', function () {
         if (confirm('Desea eliminar el equipo...')) {
             let id = $(this).closest('tr').children('td.idTeam').text();
-            $.post('/inc/deleteTeam.php', { id: id }, (res) => {
+            $.post('./inc/deleteTeam.php', { id: id }, (res) => {
                 getTeam();
             });
+
 
         }
 
@@ -269,7 +270,7 @@ $(() => {
     $('#valueSearch').keyup(function (e) {
         let value = $('#valueSearch').val();
         // console.log(value);
-        $.post('/inc/searchTeam.php', { nombre: value }, function (res) {
+        $.post('./inc/searchTeam.php', { nombre: value }, function (res) {
 
             let template = ``;
             // console.log(res);
@@ -322,7 +323,7 @@ $(() => {
         $('#formUpload').on('submit', function (e) {
             e.preventDefault();
             $.ajax({
-                url: '/inc/uploadLogo.php',
+                url: './inc/uploadLogo.php',
                 type: 'POST',
                 data: new FormData(this),
                 contentType: false,
@@ -337,22 +338,101 @@ $(() => {
 
     //---------------------------------------LIGA----------------------------------
 
+
+    let editarLiga = false;
+
+    const validateLiga = () => {
+        if (editarLiga) {
+            dataFormL = {
+                'nombre': $('#lnombre')
+            }
+        } else {
+
+        }
+    }
+
+
+    //Add Liga
+    $('#addLiga').submit(e => {
+        e.preventDefault();
+
+
+        let formData = {
+            'nombre': $('#lnombre').val(),
+            'comuna': $('#lcomuna').val()
+        }
+
+        $.post('./inc/addLiga.php', formData, res => {
+            // console.log(res);
+            $('#addLiga').modal('hide');
+            getLiga();
+        })
+
+
+    })
+
+
+    //Delete Liga
+
+    $(document).on('click', '.deleteLiga', function () {
+        if (confirm('¿Seguro desea eliminar esta liga?')) {
+            let idL = $(this).closest('tr').children('td.idLiga').text();
+            // console.log(idL);
+            $.post('./inc/deleteLiga.php', { id: idL }, res => {
+                getLiga();
+            })
+        }
+    })
+
+    //Edit Liga
+
+    $(document).on('click', '.editLiga', function () {
+        $('#editLiga').modal('show');
+
+        id = $(this).closest('tr').children('td.idLiga').text();
+        let nombre = $(this).closest('tr').children('td.lnombre').text();
+        let comuna = $(this).closest('tr').children('td.lcomuna').text();
+        $('#lenombre').val(nombre);
+        $('#lecomuna').val(comuna);
+
+        $("#titleModalE").html(`Editar Liga: ${nombre}`)
+    })
+
+    $('#editLiga').submit(function (e) {
+        e.preventDefault();
+        let nombre = $('#lenombre').val();
+        let comuna = $('#lecomuna').val();
+
+        let formData = {
+            'id': id,
+            'nombre': nombre,
+            'comuna': comuna
+        }
+
+        $.post('./inc/editLiga.php', formData, function (res) {
+            $('#editLiga').modal('hide');
+            getLiga();
+        })
+    })
+
+
+
     const getLiga = () => {
-        $.get('/inc/getLeage.php', function (res) {
+        $.get('./inc/getLeage.php', function (res) {
             let json = JSON.parse(res);
             let template = ``;
-            console.log(json);
+            // console.log(json);
 
             json.forEach(liga => {
                 template += `
                 <tr>
-                <td><span class="badge badge-secondary badge-pill">${liga.idLiga}</span></td>
-                <td>${liga.nombreLiga}</td>
-                <td>${liga.comunaLiga}</td>
+                <td class="idLiga"><span class="badge badge-secondary badge-pill">${liga.idLiga}</span></td>
+                <td class="lnombre">${liga.nombreLiga}</td>
+                <td class="lcomuna">${liga.comunaLiga}</td>
                     <td>
-                    <button class="btn btn-outline-info btn-sm detail-team" id="detailTeam" style='width:70px;display:none;'>Detalles</button>
-                    <button class="btn btn-outline-secondary btn-sm editTeam" style='width:70px;'>Editar</button>
-                    <button type="submit" class="btn btn-outline-danger btn-sm deleteTeam" style='width:35px;'>X</button>
+                    <button class="btn btn-outline-info btn-sm detail-Liga" id="detailLiga" style='width:70px;display:none;'>Detalles</button>
+                    <button class="btn btn-outline-secondary btn-sm editLiga" style='width:70px;'>Editar</button>
+                    <button type="submit" class="btn btn-outline-danger btn-sm deleteLiga" style='width:35px;'>X</button>
                     </td>
                 </tr>
                 `;
